@@ -14,3 +14,13 @@ Judge 4: 8.5
 Judge 5: 9
 Your Olympic score is 8.0
 """
+
+j1 = float(input())
+j2 = float(input())
+j3 = float(input())
+j4 = float(input())
+j5 = float(input())
+
+final = (j1 + j2 + j3 + j4 + j5)/5
+
+print("Your olympic score is " + str(final))
