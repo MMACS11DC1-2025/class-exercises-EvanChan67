@@ -9,8 +9,7 @@ Each item is worth 1.5 marks, with advanced criteria an additional 0.5 marks.
   *Advanced Criteria:* Efficiently handles large datasets or multiple files.
 
 - [ ] **1. Algorithm Design**  
-  Clear and logical algorithm design written in English before coding.
-  *Advanced Criteria:* The algorithm is efficient and optimized for performance, avoiding unnecessary computations.
+  C 
 
 - [ ] **2. Use of Comparison Operators**  
   Effectively uses comparison operators (`<`, `>`, `<=`, `>=`) to analyze data.  
