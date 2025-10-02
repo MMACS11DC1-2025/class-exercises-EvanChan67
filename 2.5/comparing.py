@@ -28,23 +28,23 @@ file.readline()
 
 # Give the user categories to choose from
 print("Pick a category to analyze:")
-print("2: Favourite Digit")
-print("3: Favourite Pet")
-print("4: Favourite Subject")
-print("5: Favourite Sport to play")
-print("6: Favourite Sport to watch")
-print("7: Favourite Music Genre")
-print("8: Favourite Movie Genre")
-print("9: Favourite Fast Food Place")
+print("2: Favourite digit")
+print("3: Favourite pet")
+print("4: Favourite subject")
+print("5: Favourite sport to play")
+print("6: Favourite sport to watch")
+print("7: Favourite music genre")
+print("8: Favourite movie genre")
+print("9: Favourite fast food place")
 
 # Ask the user for a category
-category_choice = int(input("Enter the *NUMBER* of the category: ").strip(".!,?"))
+category_choice = int(input("Enter the NUMBER of the category: ").strip(".,?!"))
 
 # Laying down the conditions
 if category_choice == 2 or category_choice == 3 or category_choice == 4 or category_choice == 5 or category_choice == 6 or category_choice == 7 or category_choice == 8 or category_choice == 9:
 
     answer_counts = {}
-
+    
     # Loop through each line in the file
     for line in file:
         parts = line.strip().split(",")
