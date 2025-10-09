@@ -6,7 +6,7 @@ You must use user input to add interactivity to the program.
 You must design your algorithm in English first, then translate it to Python code.
 Test as you go! Describe in your comments what steps you took to test your code.
 """
-# September 29-October 5, 2025
+# September 29-October 8, 2025
 # Evan Chan
 # Counting Bot
 
@@ -29,7 +29,7 @@ to the category, and compares it to the most popular option at the end
 """
 
 """
-TEST CASE 1: 7, Evan Chan
+TEST CASE 1: 7, evan chan
 
 Pick a category to analyze:
 1: Favourite digit
@@ -41,7 +41,7 @@ Pick a category to analyze:
 7: Favourite movie genre
 8: Favourite fast food place
 Enter the NUMBER of the category: 7
-Enter the full name of a student (e.g. Evan Chan): evan chan     
+Enter the full name of a student (e.g. Evan Chan) who you believe chose the most popular answer : evan chan     
 ==========================================================================================================================
 
 Number of Votes Each Response Received:
@@ -63,7 +63,7 @@ It was fairly close! Evan Chan's response of Horror got 4 fewer votes than the m
 """
 
 """
-TEST CASE 2: 2, Steven Zhang
+TEST CASE 2: 2, steven zhang
 
 Pick a category to analyze:
 1: Favourite digit
@@ -75,7 +75,7 @@ Pick a category to analyze:
 7: Favourite movie genre
 8: Favourite fast food place
 Enter the NUMBER of the category: 2
-Enter the full name of a student (e.g. Evan Chan): steven zhang
+Enter the full name of a student (e.g. Evan Chan) who you believe chose the most popular answer : steven zhang
 ==========================================================================================================================
 
 Number of Votes Each Response Received:
@@ -109,7 +109,7 @@ print("7: Favourite movie genre")
 print("8: Favourite fast food place")
 
 
-# Looping through the question, if they inputted an invalid response
+# Looping through the question if they input an invalid response
 while True:
     # Ask the user for a category
     category = int(input("Enter the NUMBER of the category: ").strip(".,?! "))
@@ -119,18 +119,15 @@ while True:
     else:
         print("Invalid response. Please try again")
 
-answer_counts = {}
-
 # Asking the user for the full name of a student in our class, and defining the variable for their answer
-student_name = input("Enter the full name of a student (e.g. Evan Chan): ").strip(".,?! ").title()
+student_name = input("Enter the full name of a student (e.g. Evan Chan) who you believe chose the most popular answer: ").strip(".,?! ").title()
 studentAnswer = None
 
+answer_counts = {}
 # Loop through each line in the file
 for line in file:
     parts = line.strip().split(",")
 
-    # Identifies every name in the file
-    name = parts[1].strip()
     answer = parts[category]
     
     # Adding the totals of each option
@@ -139,17 +136,20 @@ for line in file:
     else:
         answer_counts[answer] = 1
 
+    # Identifies every name in the file
+    name = parts[1].strip()
+
     # Pairing the name chosen with the names answer in the user specified category
     if name.lower() == student_name.lower():
         studentAnswer = answer
 
-# Finding the most and least popular options
+# Setting the first answer in the dictionary as the most and least popular
 for first_answer in answer_counts:
     most_popular = first_answer
     least_popular = first_answer
     break  
 
-# Compare each answer to find most and least popular
+# Going through every option in answer_counts, if the current option is greater than the current most popular than it becomes the most popular, same with the least popular
 for option in answer_counts:
     if answer_counts[option] > answer_counts[most_popular]:
         most_popular = option
@@ -165,13 +165,12 @@ for option in answer_counts:
 print("\nMost popular: " + most_popular + " with " + str(answer_counts[most_popular]) + " votes")
 print("Least popular: " + least_popular + " with " + str(answer_counts[least_popular]) + " votes")
 
-# Check if student answer exists
-
+# Check if student exists and has a value paired to it
 if studentAnswer is not None:
     print("\n" + student_name + " chose " + studentAnswer)
     # Case for if the students answer was the most popular
     if studentAnswer == most_popular:
-        print("\n" + student_name + "'s response of " + studentAnswer + " was the option with the most votes!")
+        print("\nNice Job! " + student_name + "'s response of " + studentAnswer + " was the option with the most votes!")
     else:
         diff = answer_counts[most_popular] - answer_counts[studentAnswer]
 
@@ -186,7 +185,7 @@ if studentAnswer is not None:
         # Case for if the students answer was 5 or more votes less than the most popular
         else:
             print("\nIt was not close at all! " + student_name + "'s response of " + studentAnswer + " got " + str(diff) + " fewer votes than the most popular response, " + most_popular)
-# If the students answer is not found           
+# If the student inputted is not recognized          
 else:
     print("Student not found")
 
