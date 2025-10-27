@@ -26,7 +26,7 @@ def power(x, y):
     if y == 0:
         return 1
     
-    return x * x**(y-1)
+    return x * power(x, y-1)
 
 # Test cases
 print(power(2, 3))  # Expected output: 8
@@ -64,13 +64,17 @@ print(sum_list([5, 10, 15]))    # Expected output: 30
 
 vowels = "aeiou"
 def count_vowels_recursive_helper(word, index):
-    # TODO implement this
-    return 0
+    if index == len(word):
+        return 0
+    if word[index] in vowels:
+        return 1 + count_vowels_recursive_helper(word, index + 1)
+    else:
+        return count_vowels_recursive_helper(word, index + 1)
 
 def count_vowels(word):
-    # TODO implement this
-    return 0
-
+    if len(word) > 0:
+        return count_vowels_recursive_helper(word, 0)
+    return 0 
 # Test cases
 print(count_vowels("hello"))     # Expected output: 2
 print(count_vowels("python"))    # Expected output: 1
