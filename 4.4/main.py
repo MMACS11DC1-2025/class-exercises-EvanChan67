@@ -12,54 +12,58 @@ themes = {
     "rainbow": ["#FF0000", "#FFA500", "#FFDE21", "#80EF80", "#90D5FF", "#3C3CE8","#8F00FF"]
 }
 
-# Defining the rotating shapes function with the parameters t, length, turns, angle, colours, levels, and count
-def draw_rotating_shapes(t, length, turns, angle, colours, levels, count=0):
+# Defining the rotating shapes function with the parameters t, length, turns, angle, colours, levels, and colour index
+def draw_rotating_shapes(t, length, turns, angle, colours, levels, colour_index = 0):
     # Base case/ terminating case
     if turns == 0:
-        return count
+        return 0
 
-    # Cycles through the colours list without going out of range
-    t.color(colours[count % len(colours)])
-
+    # Setting the colour of the line(s)
+    t.color(colours[colour_index])
 
     for i in range(levels):
         t.forward(length)
 
         # Change how much it turns to create the shape based off of the shape that user inputted
+        # Octagon
+        if shape == 1:
+            t.left(45)
         # Hexagon
         if shape == 2:
             t.left(60)
-            t.width(4)
         # Square
         elif shape == 3:
             t.left(90)
-            t.width(4)
         # Triangle
         elif shape == 4:
             t.left(120)
-            t.width(4)
         # Star
         elif shape == 5:
             t.left(150)
-            t.width(4)
         # Octagon
         else:
             t.left(45)
-            t.width(4)
 
-    # Rotate slightly and recurse
+    # Rotate slightly
     t.right(angle)
-
+    
+    # Cycle through a new colour from the colour list
+    next_colour_index = colour_index + 1
+    if next_colour_index == len(colours):
+        # If the next index is out of the range reset it back to 0 (the start of the list)
+        next_colour_index = 0
+        
     # The "length" and "turns" parameters change
     # Length increases by 2 to make each shape a bit larger than the last
     # Turns decreases by 1 to keep rotating until it reaches the base case
-    return draw_rotating_shapes(t, length+2, turns - 1, angle, colours, levels, count + 1)
+    # Returns the function increased by 1 to count the number of calls
+    return draw_rotating_shapes(t, length+2, turns - 1, angle, colours, levels, next_colour_index) + 1
 
 # While loops used to make sure the user provides a valid input that wont crash the program
 
 while True:
   # User input for which shape they wish to rotate around
-  shape = int(input("Enter the number of the shape you want to rotate:\n1) Octagon 2) Hexagon 3) Square 4) Triangle 5) Star"))
+  shape = int(input("Enter an integer of the shape you want to rotate:\n1) Octagon 2) Hexagon 3) Square 4) Triangle 5) Star"))
   if 1<= shape <=5:
     break
   print("Invalid option. Please type an integer from 1-5")
@@ -73,14 +77,14 @@ while True:
   
 while True:
     # User input for the colour of the first set of rotating shapes
-    theme = input("Enter the theme for the outer layer: (reds, greens, blues, greys, rainbow)").strip("!.?,").lower()
+    theme = input("Enter the theme for the outer layer: (reds, greens, blues, greys, rainbow)").strip("!.?, ").lower()
     if theme in themes:
        break
     print("Please type a valid colour")
 
 while True: 
     # User input for the colour of the second set of rotating shapes
-    theme2 = input("Enter the theme for the inner layer: (reds, greens, blues, greys, rainbow)").strip("!.?,").lower()
+    theme2 = input("Enter the theme for the inner layer: (reds, greens, blues, greys, rainbow)").strip("!.?, ").lower()
     if theme2 in themes:
         break
     print("Please type a valid colour")
@@ -88,6 +92,7 @@ while True:
 
 # Defining the turtle, its speed, the background colour of the screen, and hiding it
 t = turtle.Turtle()
+t.width(4)
 t.speed(0)
 t.hideturtle()
 background = turtle.Screen()
