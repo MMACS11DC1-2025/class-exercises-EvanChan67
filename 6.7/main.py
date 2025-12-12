@@ -95,7 +95,7 @@ def main():
     
     master_list = [] 
 
-    print("\n--- Starting Image Analysis ---")
+    print("\nStarting Image Analysis")
     
     # start timer
     start_time1 = time.time()
@@ -150,7 +150,7 @@ def main():
 # User input and start
 while True:
     try: 
-        usertarget = float(input("Input a rational number (1-100) for a density score ").strip(".!?, "))
+        usertarget = float(input("Guess a rational number (1-100) for a density score ").strip(".!?, "))
     except:
         print("Invalid input. Input a DECIMAL")
     else:
