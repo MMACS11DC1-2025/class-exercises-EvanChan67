@@ -1,44 +1,62 @@
 from PIL import Image  
 import time            
 
+''' 
+Function to determine if the pixel is considered red
+1. Normalize the RGB values to a 0-1 scale
+2. Calculate a weighted score based on the RGB values
+3. Returns a number from 0-2 indicating the density of the red color.
+'''
 def is_target_feature(r, g, b):
-    
-    # In the heat map, hot areas are usually red or orange 
-    if r > 160 and b < 100:
-        return True
-    else:
-        return False
+    # Normalize values to 0-1 for proportional calculation
+    r_norm = r / 255.0
+    g_norm = g / 255.0
+    b_norm = b / 255.0
 
+    # Calculate a weighted score: 
+    # Red contributes heavily (x2), Green and Blue contribute negatively 
+    # (indicating cooler colors like yellow/green/blue).
+    weighted_score = (r_norm * 2.0) - g_norm - b_norm
+    
+    # Only consider areas that have a positive heat signal
+    return max(0.0, weighted_score) 
+    # Returns a number (0.0 to approx 2.0)
+'''
+Function to analyze every pixel in an image
+1. Create a nested for loop to iterate through every pixel
+2. Pass the pixel through the is_target_feature function to determine the weight of hot pixels
+3. Add the weight to a running total
+4. Find the average weighted score to see the density score
+'''
 def analyze_image(image_name):
-
-    # Initializing the image, pixels, width and height, and total pixels
-    img = Image.open(image_name)
-
-    pixels = img.load()
     
-    width = img.width  
+    img = Image.open(image_name)
+    pixels = img.load()
+    width = img.width 
     height = img.height 
     
-    hotpixels = 0
+    total_weighted_score = 0.0 # This replaces hotpixels counter
     totalpixels = width * height
 
-    # Nested loops to iterate over x (width) and y (height) 
     for x in range(width):
         for y in range(height):
-            # pixels[x, y] returns a tuple (r, g, b)
             r = pixels[x, y][0]
             g = pixels[x, y][1]
             b = pixels[x, y][2]
             
-            # Check if this pixel matches the feature
-            if is_target_feature(r, g, b):
-                hotpixels += 1
+            # The function now returns a score (weight)
+            pixel_weight = is_target_feature(r, g, b)
+            total_weighted_score += pixel_weight
     
-    # Calculate what percentage of the area is hot
-    # Multiply by 100 to get a clean number 
-    density_score = (hotpixels / totalpixels) * 100
+    # Calculate the average weighted score across the image
+    density_score = (total_weighted_score / totalpixels) * 100
     return density_score
-
+'''
+Selection sort function is used to sort the images by density score from highest to lowest
+1. Nested for loop to go through every element and test if the rest of them are larger than it
+2. Swap the larger element with the current index
+3. Returns the sorted list  
+'''
 def selection_sort(data_list):
     
     n = len(data_list)
@@ -59,7 +77,14 @@ def selection_sort(data_list):
         data_list[max_index] = temp
         
     return data_list
-
+''' 
+Binary search function to search for a specific target value
+1. List must be sorted before
+2. Find the middle of the list and the boundaries
+3. Compare the difference of the guessed score and the current score with the margin of error
+4. Return it if it is less than the margin of error
+5. Otherwise if the current score is less than the guessed score, the target is in the left half. Vice versa
+'''
 def binary_search(sorted_list, target_score):
     low = 0
     high = len(sorted_list) - 1
@@ -73,7 +98,8 @@ def binary_search(sorted_list, target_score):
         margin_of_error = 1
         
         if abs(mid_score - target_score) < margin_of_error:
-            return mid # Target found, return index
+            # Target found, return index
+            return mid 
         
         # Since the list is sorted from high to low, the logic is reversed
         elif mid_score < target_score:
@@ -85,7 +111,9 @@ def binary_search(sorted_list, target_score):
 
     # Target not found        
     return -1 
-
+'''
+Main function that contains everything the program does
+'''
 def main():
     # Images list
     image_files = [
