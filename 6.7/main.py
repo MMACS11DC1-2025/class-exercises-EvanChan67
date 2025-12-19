@@ -9,13 +9,12 @@ Function to determine if the pixel is considered hot
 '''
 def is_target_feature(r, g, b):
     # Normalize values to 0-1 for proportional calculation
-    r_norm = r / 255.0
-    g_norm = g / 255.0
-    b_norm = b / 255.0
+    r_norm = r / 255
+    g_norm = g / 255
+    b_norm = b / 255
 
     # Calculate a weighted score: 
-    # Red contributes heavily (x2), green and blue contribute negatively 
-    # indicating cooler colors like yellow/green/blue
+    # Red contributes heavily so its weight more, green and blue contribute negatively indicating cooler colors like yellow/green/blue
     weighted_score = (r_norm * 2.0) - g_norm - b_norm
     
     # Only consider areas that have a positive heat signal
@@ -27,6 +26,8 @@ Function to analyze every pixel in an image
 2. Pass the pixel through the is_target_feature function to determine the weight of hot pixels
 3. Add the weight to a running total
 4. Find the average weighted score to see the density score
+5. This function also creates a visual mask of the image to show where the hot pixels are (green for hot, grayscale for cold)
+6. Creates a new image file with the mask and saves it
 '''
 def analyze_image(image_name):
     
@@ -35,7 +36,11 @@ def analyze_image(image_name):
     width = img.width 
     height = img.height 
     
-    total_weighted_score = 0.0 # This replaces hotpixels counter
+    # Masked image
+    mask_img = img.copy()
+    mask_pixels = mask_img.load()
+
+    total_weighted_score = 0.0
     totalpixels = width * height
 
     for x in range(width):
@@ -47,7 +52,21 @@ def analyze_image(image_name):
             # Get the weight of the pixel
             pixel_weight = is_target_feature(r, g, b)
             total_weighted_score += pixel_weight
+
+            if pixel_weight > 0:
+                # If it has any heat, turn it bright green
+                mask_pixels[x, y] = (0, 255, 0)
+            else:
+                # If it is cold, turn it grayscale so the heat stands out
+                avg = int((r + g + b) / 3)
+                mask_pixels[x, y] = (avg, avg, avg)
     
+    # Save the masked image 
+    clean_name = image_name.split('/')[-1] 
+    output_filename = "mask_" + clean_name
+    mask_img.save(output_filename)
+    print("Saved visual map: {}".format(output_filename))
+
     # Calculate the average weighted score across the image
     density_score = (total_weighted_score / totalpixels) * 100
     return density_score
@@ -180,10 +199,8 @@ while True:
     except:
         print("Invalid input. Input a DECIMAL")
     else:
-        if 0 <= usertarget <=100:
+        if 0 <= usertarget <= 100:
             main()
             break
         else:
-          print("Invalid input. Input a number from the range 1-100")  
-        
-        
+          print("Invalid input. Input a number from the range 1-100")          
