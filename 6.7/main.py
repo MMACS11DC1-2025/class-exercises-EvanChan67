@@ -2,7 +2,7 @@ from PIL import Image
 import time            
 
 ''' 
-Function to determine if the pixel is considered red
+Function to determine if the pixel is considered hot
 1. Normalize the RGB values to a 0-1 scale
 2. Calculate a weighted score based on the RGB values
 3. Returns a number from 0-2 indicating the density of the red color.
@@ -14,13 +14,13 @@ def is_target_feature(r, g, b):
     b_norm = b / 255.0
 
     # Calculate a weighted score: 
-    # Red contributes heavily (x2), Green and Blue contribute negatively 
-    # (indicating cooler colors like yellow/green/blue).
+    # Red contributes heavily (x2), green and blue contribute negatively 
+    # indicating cooler colors like yellow/green/blue
     weighted_score = (r_norm * 2.0) - g_norm - b_norm
     
     # Only consider areas that have a positive heat signal
     return max(0.0, weighted_score) 
-    # Returns a number (0.0 to approx 2.0)
+    # Returns a number (0.0 to approximately 2.0)
 '''
 Function to analyze every pixel in an image
 1. Create a nested for loop to iterate through every pixel
@@ -43,8 +43,8 @@ def analyze_image(image_name):
             r = pixels[x, y][0]
             g = pixels[x, y][1]
             b = pixels[x, y][2]
-            
-            # The function now returns a score (weight)
+
+            # Get the weight of the pixel
             pixel_weight = is_target_feature(r, g, b)
             total_weighted_score += pixel_weight
     
@@ -59,13 +59,11 @@ Selection sort function is used to sort the images by density score from highest
 '''
 def selection_sort(data_list):
     
-    n = len(data_list)
-    
     # Traverse through all list elements
-    for i in range(n):
+    for i in range(len(data_list)):
         # Find the max element in remaining unsorted array
         max_index = i
-        for j in range(i + 1, n):
+        for j in range(i + 1, len(data_list)):
             # Compare scores (index 1 of the tuple)
             # Use > because I want to find highest to lowest
             if data_list[j][1] > data_list[max_index][1]:
