@@ -8,6 +8,11 @@ Function to determine if the pixel is considered hot
 3. Returns a number from 0-2 indicating the density of the red color.
 '''
 def is_target_feature(r, g, b):
+    # If the pixel is almost white, treat it as cold
+    # This handles cases where white was being misclassified as hot
+    if r >= 100 and g >= 100 and b >= 100:
+        return 0.0
+
     # Normalize values to 0-1 for proportional calculation
     r_norm = r / 255
     g_norm = g / 255
@@ -16,9 +21,9 @@ def is_target_feature(r, g, b):
     # Calculate a weighted score: 
     # Red contributes heavily so its weight more, green and blue contribute negatively indicating cooler colors like yellow/green/blue
     weighted_score = (r_norm * 2.0) - g_norm - b_norm
-    
+
     # Only consider areas that have a positive heat signal
-    return max(0.0, weighted_score) 
+    return max(0.0, weighted_score)
     # Returns a number (0.0 to approximately 2.0)
 '''
 Function to analyze every pixel in an image
