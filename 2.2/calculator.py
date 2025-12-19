@@ -8,3 +8,29 @@ exercises to include calculations, if you wish.
 Remember to design your algorithm in English first, then translate it to Python 
 code. Test as you go!
 """
+#Evan Chan
+#Calculator
+#Sept 22
+
+print("Input two integers:")
+number1 = int(input())
+number2 = int(input())
+
+print("Now give me an operation:")
+operation = input()
+operationlist = ["+", "/", "-", "*"]
+
+if operation == "-":
+    subtract = number1 - number2
+    print(str(number1) + "-" + str(number2) + "=" + str(subtract))
+elif operation == "+":
+    add = number1 + number2
+    print(str(number1) + "+" + str(number2) + "=" + str(add))
+elif operation == "*":
+    multiply = number1 * number2
+    print(str(number1) + "*" + str(number2) + "=" + str(multiply))
+elif operation == "/":
+    divide = number1 / number2
+    print(str(number1) + "/" + str(number2) + "=" + str(divide))
+else:
+    print("Not recognized operation, please restart")
